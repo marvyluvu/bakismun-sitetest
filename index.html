@@ -1,177 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BAKIS MUN // Transmission Console</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BAKIS MUN // ACCESS PANEL</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Press Start 2P', monospace;
-      background-color: #000;
-      color: #00FF00;
-      overflow-x: hidden;
-    }
-
-    .scanlines::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 255, 0, 0.02),
-        rgba(0, 255, 0, 0.02) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      z-index: 2;
-    }
-
-    .flicker {
-      animation: flicker 2s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 1; }
-      49% { opacity: 0.9; }
-      50% { opacity: 1; }
-      100% { opacity: 0.95; }
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 1rem;
+      overflow: hidden;
     }
 
     .terminal {
-      max-width: 900px;
+      max-width: 800px;
       margin: auto;
-      padding: 30px;
-      border: 2px solid #00FF00;
-      background-color: #000000;
-      box-shadow: 0 0 20px #00FF00;
-      position: relative;
-      z-index: 1;
+      white-space: pre-wrap;
     }
 
-    h1 {
-      font-size: 16px;
-      text-align: center;
-      color: #00FF00;
-      animation: glitch 1s infinite alternate;
+    .glow {
+      text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99;
     }
 
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 red; }
-      100% { text-shadow: -2px 0 blue; }
+    .blinker {
+      display: inline-block;
+      width: 10px;
+      background: #00ff99;
+      animation: blink 1s step-start infinite;
+      margin-left: 5px;
+    }
+
+    @keyframes blink {
+      50% { background: transparent; }
     }
 
     .btn {
+      color: #00ff99;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+      margin-top: 1rem;
       display: inline-block;
-      margin: 15px 5px;
-      padding: 8px 18px;
-      font-size: 10px;
-      color: #000;
-      background-color: #00FF00;
-      text-decoration: none;
-      box-shadow: 0 0 8px #00FF00;
     }
 
     .btn:hover {
-      background-color: #0f0;
-      box-shadow: 0 0 15px #00FF00;
-    }
-
-    .section {
-      margin-top: 30px;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .loading {
-      text-align: center;
-      font-size: 12px;
-      margin: 10px 0;
-    }
-
-    .ascii {
-      white-space: pre;
-      text-align: center;
-      font-size: 8px;
-      color: #00FF00;
-      margin-top: 30px;
-    }
-
-    footer {
-      font-size: 10px;
-      text-align: center;
-      margin-top: 40px;
-      color: #00FF00;
-    }
-
-    .typewriter {
-      font-size: 10px;
-      color: #0f0;
-      text-align: center;
+      text-decoration: underline;
     }
   </style>
 </head>
-<body class="scanlines flicker">
-
-  <div class="terminal">
-    <h1>[ BAKIS-MUN // NODE UPLINK v2025 ]</h1>
-    <p class="loading" id="loading">> Establishing encrypted connection...</p>
-
-    <div class="section" style="text-align:center;">
-      <a href="https://your-registration-link.com" class="btn" target="_blank">REGISTER</a>
-      <a href="https://instagram.com/yourmun" class="btn" target="_blank">TRANSMIT TO INSTAGRAM</a>
-    </div>
-
-    <div class="section">
-      <p class="typewriter">> Committees Unlocked:</p>
-      <ul>
-        <li>- [DISEC] CYBER CONFLICT RESOLUTION</li>
-        <li>- [UNHRC] AI & ETHICS OBSERVATORY</li>
-        <li>- [CRISIS] PLANETARY GOVERNANCE TEST</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <p class="typewriter">> Incoming Media Nodes...</p>
-      <p class="loading">Awaiting gallery decryption.</p>
-    </div>
-
-    <div class="ascii">
-<pre>
-██╗░░░░░██╗░░░██╗███╗░░██╗░█████╗░
-██║░░░░░██║░░░██║████╗░██║██╔══██╗
-██║░░░░░██║░░░██║██╔██╗██║██║░░██║
-██║░░░░░██║░░░██║██║╚████║██║░░██║
-███████╗╚██████╔╝██║░╚███║╚█████╔╝
-╚══════╝░╚═════╝░╚═╝░░╚══╝░╚════╝░
-</pre>
-    </div>
-
-    <footer>TRANSMISSION ENDS — BAKIS MUN © 2025</footer>
+<body>
+  <div class="terminal glow" id="terminal">
+    > booting bakis.mun.protocol ...
   </div>
+  <script>
+    const terminal = document.getElementById('terminal');
+    const lines = [
+      '> INIT... [OK]',
+      '> HANDSHAKE... [ESTABLISHED]',
+      '> ENCRYPTION... [ACTIVE]',
+      '> WELCOME AGENT. ACCESSING BAKIS_MUN_TERMINAL',
+      '',
+      '[COMMAND OPTIONS]',
+      '• OPEN_COMMS           → <a href="https://instagram.com/bakismun" target="_blank" class="btn">Instagram</a>',
+      '• INITIATE_REGISTRY    → <a href="https://yourformlink.com" class="btn">Register</a>',
+      '• LOAD_DIRECTIVES      → <a href="#committees" class="btn">Committees</a>',
+      '• ACCESS_LOGS          → <a href="#gallery" class="btn">Gallery</a>',
+      '',
+      '>> awaiting command <span class="blinker"></span>'
+    ];
 
-  <audio id="typewriter-sfx" src="https://www.soundjay.com/mechanical/sounds/typewriter-key-1.mp3" preload="auto"></audio>
+    let index = 0;
 
-<div style="text-align: center; margin-top: 10px;">
-  <button onclick="document.getElementById('typewriter-sfx').play()" class="btn">Enable Audio</button>
-</div>
+    function typeLine() {
+      if (index < lines.length) {
+        const line = lines[index];
+        terminal.innerHTML += "\n" + line;
+        index++;
+        setTimeout(typeLine, 300);
+      }
+    }
 
-<script>
-  const loading = document.getElementById('loading');
-  let dots = 0;
-
-  setInterval(() => {
-    dots = (dots + 1) % 4;
-    loading.textContent = '> Establishing encrypted connection' + '.'.repeat(dots);
-  }, 500);
-</script>
-
+    setTimeout(typeLine, 800);
+  </script>
 </body>
 </html>
