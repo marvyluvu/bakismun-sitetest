@@ -64,7 +64,11 @@
       '> INIT... [OK]',
       '> HANDSHAKE... [ESTABLISHED]',
       '> ENCRYPTION... [ACTIVE]',
-      '> WELCOME AGENT. ACCESSING BAKIS_MUN_TERMINAL',
+      '> PROTOCOL: BAKIS_MUN v2.5',
+      '> MOTD: "seek diplomacy."',
+      '> MOTD: "seek the light."',
+      '',
+      '[SYSTEM STATUS: ONLINE]',
       '',
       '[COMMAND OPTIONS]',
       '• OPEN_COMMS           → <a href="https://instagram.com/bakismun" target="_blank" class="btn">Instagram</a>',
@@ -82,11 +86,11 @@
         const line = lines[index];
         terminal.innerHTML += "\n" + line;
         index++;
-        setTimeout(typeLine, 300);
+        setTimeout(typeLine, 250);
       }
     }
 
-    setTimeout(typeLine, 800);
+    setTimeout(typeLine, 700);
   </script>
 </body>
 </html>
