@@ -52,12 +52,35 @@
     .btn:hover {
       text-decoration: underline;
     }
+
+    .quote {
+      opacity: 0.6;
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    .hidden {
+      display: none;
+      margin-top: 1rem;
+      color: #00ffaa;
+    }
+
+    .glitch {
+      animation: glitch 1s infinite;
+    }
+
+    @keyframes glitch {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; transform: translateX(-1px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
   </style>
 </head>
 <body>
   <div class="terminal glow" id="terminal">
     > booting bakis.mun.protocol ...
   </div>
+
   <script>
     const terminal = document.getElementById('terminal');
     const lines = [
@@ -67,6 +90,10 @@
       '> PROTOCOL: BAKIS_MUN v2.5',
       '> MOTD: "seek diplomacy."',
       '> MOTD: "seek the light."',
+      '> SCANNING... [INTEL FOUND]',
+      '> "When the power of love overcomes the love of power, the world will know peace."',
+      '> "Diplomacy is the art of letting someone else have your way."',
+      '> "In politics, nothing happens by accident."',
       '',
       '[SYSTEM STATUS: ONLINE]',
       '',
@@ -75,8 +102,16 @@
       '• INITIATE_REGISTRY    → <a href="https://yourformlink.com" class="btn">Register</a>',
       '• LOAD_DIRECTIVES      → <a href="#committees" class="btn">Committees</a>',
       '• ACCESS_LOGS          → <a href="#gallery" class="btn">Gallery</a>',
+      '• EXEC /reveal         → <button class="btn" onclick="reveal()">Reveal Transmission</button>',
       '',
       '>> awaiting command <span class="blinker"></span>'
+    ];
+
+    const secretMessages = [
+      '"True diplomacy is subtle sabotage."',
+      '"The brightest light is cast from the darkest decisions."',
+      '"Power is not taken; it is presented through silence."',
+      '"Diplomacy is war by other means. Talk soft, aim sharp."'
     ];
 
     let index = 0;
@@ -86,8 +121,16 @@
         const line = lines[index];
         terminal.innerHTML += "\n" + line;
         index++;
-        setTimeout(typeLine, 250);
+        setTimeout(typeLine, 280);
       }
+    }
+
+    function reveal() {
+      const msg = secretMessages[Math.floor(Math.random() * secretMessages.length)];
+      const secret = document.createElement("div");
+      secret.className = "hidden glow glitch";
+      secret.innerHTML = `> UNLOCKED: ${msg}`;
+      terminal.appendChild(secret);
     }
 
     setTimeout(typeLine, 700);
