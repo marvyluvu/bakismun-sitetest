@@ -1,1 +1,142 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BAKIS MUN // MAINFRAME ACCESS</title>
+  <style>
+    body {
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
+      z-index: 5;
+      animation: flicker 0.15s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+
+    .boot-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: #33ff00;
+      font-size: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .boot-line {
+      margin: 0;
+      white-space: pre;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .content {
+      display: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .blinker {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff99;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    a {
+      color: #00ffaa;
+      display: block;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body class="scanlines">
+  <!-- Boot screen -->
+  <div id="bootScreen" class="boot-screen">
+    <p class="boot-line">BAKIS MUN v1.9.74 BIOS</p>
+    <p class="boot-line">Loading system integrity modules...</p>
+    <p class="boot-line">Verifying diplomatic encryption keys...</p>
+    <p class="boot-line">Initializing Mainframe Interface</p>
+    <p class="boot-line">Authenticating...</p>
+    <p class="boot-line">LOADING PANEL █</p>
+  </div>
+
+  <!-- Terminal Interface -->
+  <div class="content">
+    <div id="intro"></div>
+    <p>"Seek diplomacy."</p>
+    <p>"Seek the light."</p>
+
+    <p>"Those who control language control diplomacy."</p>
+    <p>"Peace is maintained not by silence, but by dialogue."</p>
+    <p>"History is a loop—every debate echoes a previous one."</p>
+    <p>"The more cryptic the agenda, the louder its impact."</p>
+
+    <a href="committees.html">> ACCESS COMMITTEE DATABASE</a>
+    <a href="registry.html">> INITIATE REGISTRATION PROTOCOL</a>
+    <a href="https://instagram.com/yourhandle">> REDIRECT TO TRANSMISSION ARCHIVE (Instagram)</a>
+    <a href="photos.html">> VISUAL LOGS ACCESS</a>
+  </div>
+
+  <script>
+    const introLines = [
+      '> LINKING MAINFRAME NODE ...',
+      '> DECRYPTING ACCESS LAYERS ...',
+      '> PANEL ONLINE ✓\n'
+    ];
+
+    let i = 0;
+    const introEl = document.getElementById('intro');
+    const bootScreen = document.getElementById('bootScreen');
+    const contentEl = document.querySelector('.content');
+
+    setTimeout(() => {
+      bootScreen.classList.add('hidden');
+      contentEl.style.display = 'block';
+      typeLine();
+    }, 4000);
+
+    function typeLine() {
+      if (i < introLines.length) {
+        introEl.textContent += introLines[i++] + '\n';
+        setTimeout(typeLine, 700);
+      }
+    }
+  </script>
+</body>
+</html>
