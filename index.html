@@ -13,11 +13,11 @@
       font-size: 16px;
       line-height: 1.5;
       padding: 1rem;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .terminal {
-      max-width: 800px;
+      max-width: 960px;
       margin: auto;
       white-space: pre-wrap;
     }
@@ -53,12 +53,6 @@
       text-decoration: underline;
     }
 
-    .quote {
-      opacity: 0.6;
-      font-style: italic;
-      margin-top: 1rem;
-    }
-
     .hidden {
       display: none;
       margin-top: 1rem;
@@ -66,13 +60,16 @@
     }
 
     .glitch {
-      animation: glitch 1s infinite;
+      animation: glitch 1.2s infinite;
     }
 
     @keyframes glitch {
       0% { opacity: 1; }
-      50% { opacity: 0.8; transform: translateX(-1px); }
-      100% { opacity: 1; transform: translateX(0); }
+      20% { transform: translateX(-1px); opacity: 0.9; }
+      40% { transform: translateX(1px); opacity: 0.8; }
+      60% { transform: translateX(-1px); opacity: 0.9; }
+      80% { transform: translateX(1px); opacity: 1; }
+      100% { transform: translateX(0); }
     }
   </style>
 </head>
@@ -87,21 +84,22 @@
       '> INIT... [OK]',
       '> HANDSHAKE... [ESTABLISHED]',
       '> ENCRYPTION... [ACTIVE]',
-      '> PROTOCOL: BAKIS_MUN v2.5',
+      '> PROTOCOL: BAKIS_MUN v2.9',
       '> MOTD: "seek diplomacy."',
       '> MOTD: "seek the light."',
-      '> SCANNING... [INTEL FOUND]',
-      '> "When the power of love overcomes the love of power, the world will know peace."',
-      '> "Diplomacy is the art of letting someone else have your way."',
-      '> "In politics, nothing happens by accident."',
+      '> TRACE ROUTE: diplomacy.root.intellect.neural.port_04',
+      '> INTEL: "When the power of love overcomes the love of power, the world will know peace."',
+      '> INTEL: "Diplomacy is the art of letting someone else have your way."',
+      '> INTEL: "Peace is not absence of conflict, it is the ability to handle conflict by peaceful means."',
+      '> MONITORING PORTALS: INSTAGRAM, REGISTRY, DIRECTIVES, LOGS',
       '',
       '[SYSTEM STATUS: ONLINE]',
       '',
       '[COMMAND OPTIONS]',
       '• OPEN_COMMS           → <a href="https://instagram.com/bakismun" target="_blank" class="btn">Instagram</a>',
-      '• INITIATE_REGISTRY    → <a href="https://yourformlink.com" class="btn">Register</a>',
-      '• LOAD_DIRECTIVES      → <a href="#committees" class="btn">Committees</a>',
-      '• ACCESS_LOGS          → <a href="#gallery" class="btn">Gallery</a>',
+      '• INITIATE_REGISTRY    → <a href="register.html" class="btn">Register</a>',
+      '• LOAD_DIRECTIVES      → <a href="committees.html" class="btn">Committees</a>',
+      '• ACCESS_LOGS          → <a href="gallery.html" class="btn">Gallery</a>',
       '• EXEC /reveal         → <button class="btn" onclick="reveal()">Reveal Transmission</button>',
       '',
       '>> awaiting command <span class="blinker"></span>'
@@ -111,7 +109,8 @@
       '"True diplomacy is subtle sabotage."',
       '"The brightest light is cast from the darkest decisions."',
       '"Power is not taken; it is presented through silence."',
-      '"Diplomacy is war by other means. Talk soft, aim sharp."'
+      '"Diplomacy is war by other means. Talk soft, aim sharp."',
+      '"Words are weapons—learn to disarm or detonate."'
     ];
 
     let index = 0;
@@ -121,7 +120,7 @@
         const line = lines[index];
         terminal.innerHTML += "\n" + line;
         index++;
-        setTimeout(typeLine, 280);
+        setTimeout(typeLine, 260);
       }
     }
 
@@ -131,9 +130,10 @@
       secret.className = "hidden glow glitch";
       secret.innerHTML = `> UNLOCKED: ${msg}`;
       terminal.appendChild(secret);
+      secret.style.display = 'block';
     }
 
-    setTimeout(typeLine, 700);
+    setTimeout(typeLine, 600);
   </script>
 </body>
 </html>
