@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BAKIS MUN // REGISTRY NODE</title>
+  <style>
+    body {
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .intro {
+      white-space: pre;
+      margin-bottom: 2rem;
+    }
+
+    label, input, select {
+      display: block;
+      margin-bottom: 1rem;
+      color: #00ff99;
+    }
+
+    input, select {
+      background: transparent;
+      border: 1px solid #00ff99;
+      padding: 0.5rem;
+      width: 100%;
+    }
+
+    button {
+      background: transparent;
+      border: 1px solid #00ffaa;
+      padding: 0.6rem 1rem;
+      color: #00ffaa;
+      cursor: pointer;
+    }
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
+      z-index: 1;
+      animation: flicker 0.15s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+
+    .blinker {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff99;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .submitted {
+      color: #00ffaa;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body class="scanlines">
+  <div class="content">
+    <div class="intro" id="intro"></div>
+
+    <form id="regForm">
+      <label>Name:</label>
+      <input type="text" name="name" required />
+
+      <label>Email:</label>
+      <input type="email" name="email" required />
+
+      <label>School:</label>
+      <input type="text" name="school" required />
+
+      <label>Grade:</label>
+      <input type="text" name="grade" required />
+
+      <label>Preferred Committee:</label>
+      <select name="committee" required>
+        <option>GA1</option>
+        <option>WHO</option>
+        <option>UNHRC</option>
+        <option>HCC</option>
+        <option>UNODC</option>
+        <option>UNICEF</option>
+        <option>FIFA</option>
+      </select>
+
+      <button type="submit">DEPLOY REGISTRY</button>
+    </form>
+
+    <div id="submittedMsg" class="submitted" style="display: none;">
+      > REGISTRATION TRANSMITTED TO HQ ✓<br>
+      > NODE LINK SECURED . . . <span class="blinker"></span>
+    </div>
+
+    <a href="index.html" style="display: block; margin-top: 2rem;">← RETURN TO PANEL</a>
+  </div>
+
+  <script>
+    const introLines = [
+      '> LINKING REGISTRATION NODE ...',
+      '> ENCRYPTING FORM I/O CHANNELS ...',
+      '> CONNECTION ESTABLISHED ✓\n'
+    ];
+
+    let introEl = document.getElementById('intro');
+    let i = 0;
+
+    function typeLine() {
+      if (i < introLines.length) {
+        introEl.textContent += introLines[i++] + '\n';
+        setTimeout(typeLine, 700);
+      }
+    }
+
+    typeLine();
+
+    document.getElementById("regForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      this.style.display = "none";
+      document.getElementById("submittedMsg").style.display = "block";
+    });
+  </script>
+</body>
+</html>
