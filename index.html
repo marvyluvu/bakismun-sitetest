@@ -3,137 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // ACCESS PANEL</title>
+  <title>BAKIS MUN // MAINFRAME ACCESS</title>
   <style>
     body {
-      margin: 0;
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
-      line-height: 1.5;
-      padding: 1rem;
-      overflow-x: hidden;
+      line-height: 1.6;
+      padding: 2rem;
+      margin: 0;
     }
 
-    .terminal {
-      max-width: 960px;
-      margin: auto;
-      white-space: pre-wrap;
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
+      z-index: 5;
+      animation: flicker 0.15s infinite;
     }
 
-    .glow {
-      text-shadow: 0 0 5px #00ff99, 0 0 10px #00ff99;
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+
+    .boot-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: #33ff00;
+      font-size: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .boot-line {
+      margin: 0;
+      white-space: pre;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .content {
+      display: none;
+      position: relative;
+      z-index: 2;
     }
 
     .blinker {
       display: inline-block;
       width: 10px;
-      background: #00ff99;
-      animation: blink 1s step-start infinite;
-      margin-left: 5px;
+      background-color: #00ff99;
+      animation: blink 1s infinite;
     }
 
     @keyframes blink {
-      50% { background: transparent; }
-    }
-
-    .btn {
-      color: #00ff99;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font: inherit;
-      padding: 0;
-      margin-top: 1rem;
-      display: inline-block;
-    }
-
-    .btn:hover {
-      text-decoration: underline;
-    }
-
-    .hidden {
-      display: none;
-      margin-top: 1rem;
-      color: #00ffaa;
-    }
-
-    .glitch {
-      animation: glitch 1.2s infinite;
-    }
-
-    @keyframes glitch {
       0% { opacity: 1; }
-      20% { transform: translateX(-1px); opacity: 0.9; }
-      40% { transform: translateX(1px); opacity: 0.8; }
-      60% { transform: translateX(-1px); opacity: 0.9; }
-      80% { transform: translateX(1px); opacity: 1; }
-      100% { transform: translateX(0); }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    a {
+      color: #00ffaa;
+      display: block;
+      margin-top: 1rem;
     }
   </style>
 </head>
-<body>
-  <div class="terminal glow" id="terminal">
-    > booting bakis.mun.protocol ...
+<body class="scanlines">
+  <!-- Boot screen -->
+  <div id="bootScreen" class="boot-screen">
+    <p class="boot-line">BAKIS MUN v1.9.74 BIOS</p>
+    <p class="boot-line">Loading system integrity modules...</p>
+    <p class="boot-line">Verifying diplomatic encryption keys...</p>
+    <p class="boot-line">Initializing Mainframe Interface</p>
+    <p class="boot-line">Authenticating...</p>
+    <p class="boot-line">LOADING PANEL █</p>
+  </div>
+
+  <!-- Terminal Interface -->
+  <div class="content">
+    <div id="intro"></div>
+    <p>"Seek diplomacy."</p>
+    <p>"Seek the light."</p>
+
+    <p>"Those who control language control diplomacy."</p>
+    <p>"Peace is maintained not by silence, but by dialogue."</p>
+    <p>"History is a loop—every debate echoes a previous one."</p>
+    <p>"The more cryptic the agenda, the louder its impact."</p>
+
+    <a href="committees.html">> ACCESS COMMITTEE DATABASE</a>
+    <a href="registry.html">> INITIATE REGISTRATION PROTOCOL</a>
+    <a href="https://instagram.com/yourhandle">> REDIRECT TO TRANSMISSION ARCHIVE (Instagram)</a>
+    <a href="photos.html">> VISUAL LOGS ACCESS</a>
   </div>
 
   <script>
-    const terminal = document.getElementById('terminal');
-    const lines = [
-      '> INIT... [OK]',
-      '> HANDSHAKE... [ESTABLISHED]',
-      '> ENCRYPTION... [ACTIVE]',
-      '> PROTOCOL: BAKIS_MUN v2.9',
-      '> MOTD: "seek diplomacy."',
-      '> MOTD: "seek the light."',
-      '> TRACE ROUTE: diplomacy.root.intellect.neural.port_04',
-      '> INTEL: "When the power of love overcomes the love of power, the world will know peace."',
-      '> INTEL: "Diplomacy is the art of letting someone else have your way."',
-      '> INTEL: "Peace is not absence of conflict, it is the ability to handle conflict by peaceful means."',
-      '> MONITORING PORTALS: INSTAGRAM, REGISTRY, DIRECTIVES, LOGS',
-      '',
-      '[SYSTEM STATUS: ONLINE]',
-      '',
-      '[COMMAND OPTIONS]',
-      '• OPEN_COMMS           → <a href="https://instagram.com/bakismun" target="_blank" class="btn">Instagram</a>',
-      '• INITIATE_REGISTRY    → <a href="register.html" class="btn">Register</a>',
-      '• LOAD_DIRECTIVES      → <a href="committees.html" class="btn">Committees</a>',
-      '• ACCESS_LOGS          → <a href="gallery.html" class="btn">Gallery</a>',
-      '• EXEC /reveal         → <button class="btn" onclick="reveal()">Reveal Transmission</button>',
-      '',
-      '>> awaiting command <span class="blinker"></span>'
+    const introLines = [
+      '> LINKING MAINFRAME NODE ...',
+      '> DECRYPTING ACCESS LAYERS ...',
+      '> PANEL ONLINE ✓\n'
     ];
 
-    const secretMessages = [
-      '"True diplomacy is subtle sabotage."',
-      '"The brightest light is cast from the darkest decisions."',
-      '"Power is not taken; it is presented through silence."',
-      '"Diplomacy is war by other means. Talk soft, aim sharp."',
-      '"Words are weapons—learn to disarm or detonate."'
-    ];
+    let i = 0;
+    const introEl = document.getElementById('intro');
+    const bootScreen = document.getElementById('bootScreen');
+    const contentEl = document.querySelector('.content');
 
-    let index = 0;
+    setTimeout(() => {
+      bootScreen.classList.add('hidden');
+      contentEl.style.display = 'block';
+      typeLine();
+    }, 4000);
 
     function typeLine() {
-      if (index < lines.length) {
-        const line = lines[index];
-        terminal.innerHTML += "\n" + line;
-        index++;
-        setTimeout(typeLine, 260);
+      if (i < introLines.length) {
+        introEl.textContent += introLines[i++] + '\n';
+        setTimeout(typeLine, 700);
       }
     }
-
-    function reveal() {
-      const msg = secretMessages[Math.floor(Math.random() * secretMessages.length)];
-      const secret = document.createElement("div");
-      secret.className = "hidden glow glitch";
-      secret.innerHTML = `> UNLOCKED: ${msg}`;
-      terminal.appendChild(secret);
-      secret.style.display = 'block';
-    }
-
-    setTimeout(typeLine, 600);
   </script>
 </body>
 </html>
