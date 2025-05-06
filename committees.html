@@ -12,6 +12,7 @@
       font-size: 16px;
       line-height: 1.6;
       padding: 2rem;
+      overflow: hidden;
     }
     h1, h2 {
       color: #00ffaa;
@@ -33,53 +34,132 @@
       margin-top: 3rem;
       display: inline-block;
     }
+    .oscilloscope {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100px;
+      background: black;
+      z-index: 1;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100px;
+    }
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+    .intro {
+      white-space: pre;
+      color: #00ff99;
+      margin-bottom: 2rem;
+    }
   </style>
 </head>
 <body>
-  <h1>DIRECTIVE LOG // ACTIVE COMMITTEES</h1>
+  <div class="oscilloscope">
+    <canvas id="scope"></canvas>
+  </div>
+  <div class="content">
+    <div class="intro" id="intro"></div>
 
-  <div class="committee">
-    <h2>GA1: Disarmament and International Security Committee</h2>
-    <p class="agenda">• Addressing the use of autonomous weapons in modern warfare</p>
-    <p class="agenda">• Evaluating nuclear non-proliferation efforts in volatile regions</p>
+    <h1>DIRECTIVE LOG // ACTIVE COMMITTEES</h1>
+
+    <div class="committee">
+      <h2>GA1: Disarmament and International Security Committee</h2>
+      <p class="agenda">• Addressing the use of autonomous weapons in modern warfare</p>
+      <p class="agenda">• Evaluating nuclear non-proliferation efforts in volatile regions</p>
+    </div>
+
+    <div class="committee">
+      <h2>WHO: World Health Organization</h2>
+      <p class="agenda">• Building resilient global health systems post-pandemic</p>
+      <p class="agenda">• Combatting misinformation in global disease response</p>
+    </div>
+
+    <div class="committee">
+      <h2>UNHRC: United Nations Human Rights Council</h2>
+      <p class="agenda">• Protecting civil liberties in times of national emergency</p>
+      <p class="agenda">• Addressing human rights violations in the digital age</p>
+    </div>
+
+    <div class="committee">
+      <h2>HCC: Historical Crisis Committee</h2>
+      <p class="agenda">• The Cuban Missile Crisis: Alternate Scenarios</p>
+      <p class="agenda">• Fall of the Berlin Wall: Navigating reunification</p>
+    </div>
+
+    <div class="committee">
+      <h2>UNODC: United Nations Office on Drugs and Crime</h2>
+      <p class="agenda">• Reinventing drug policy through decriminalization and rehabilitation</p>
+      <p class="agenda">• Strengthening international cybercrime legislation</p>
+    </div>
+
+    <div class="committee">
+      <h2>UNICEF: United Nations International Children's Emergency Fund</h2>
+      <p class="agenda">• Ensuring education in conflict zones</p>
+      <p class="agenda">• Addressing the rise in child labor post-economic crises</p>
+    </div>
+
+    <div class="committee">
+      <h2>FIFA: Federation Internationale de Football Association</h2>
+      <p class="agenda">• Political neutrality in sports: myth or mandate?</p>
+      <p class="agenda">• Corruption, transparency, and ethics in global tournaments</p>
+    </div>
+
+    <a href="index.html" class="back">← Return to ACCESS PANEL</a>
   </div>
 
-  <div class="committee">
-    <h2>WHO: World Health Organization</h2>
-    <p class="agenda">• Building resilient global health systems post-pandemic</p>
-    <p class="agenda">• Combatting misinformation in global disease response</p>
-  </div>
+  <script>
+    const introLines = [
+      '> ACCESSING CLASSIFIED FILE: COMMITTEE_OVERVIEW.sys ...',
+      '> CLEARANCE LEVEL: ████ GRANTED',
+      '> ENGAGING PROTOCOL: MULTILATERAL NODE ANALYSIS',
+      '> FILE DECRYPTED ✓\n\n'
+    ];
 
-  <div class="committee">
-    <h2>UNHRC: United Nations Human Rights Council</h2>
-    <p class="agenda">• Protecting civil liberties in times of national emergency</p>
-    <p class="agenda">• Addressing human rights violations in the digital age</p>
-  </div>
+    let introEl = document.getElementById('intro');
+    let i = 0;
 
-  <div class="committee">
-    <h2>HCC: Historical Crisis Committee</h2>
-    <p class="agenda">• The Cuban Missile Crisis: Alternate Scenarios</p>
-    <p class="agenda">• Fall of the Berlin Wall: Navigating reunification</p>
-  </div>
+    function typeLine() {
+      if (i < introLines.length) {
+        introEl.textContent += introLines[i++] + '\n';
+        setTimeout(typeLine, 1000);
+      }
+    }
 
-  <div class="committee">
-    <h2>UNODC: United Nations Office on Drugs and Crime</h2>
-    <p class="agenda">• Reinventing drug policy through decriminalization and rehabilitation</p>
-    <p class="agenda">• Strengthening international cybercrime legislation</p>
-  </div>
+    typeLine();
 
-  <div class="committee">
-    <h2>UNICEF: United Nations International Children's Emergency Fund</h2>
-    <p class="agenda">• Ensuring education in conflict zones</p>
-    <p class="agenda">• Addressing the rise in child labor post-economic crises</p>
-  </div>
+    const canvas = document.getElementById('scope');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = 100;
 
-  <div class="committee">
-    <h2>FIFA: Federation Internationale de Football Association</h2>
-    <p class="agenda">• Political neutrality in sports: myth or mandate?</p>
-    <p class="agenda">• Corruption, transparency, and ethics in global tournaments</p>
-  </div>
+    function drawOscilloscope() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  <a href="index.html" class="back">← Return to ACCESS PANEL</a>
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#00ff99';
+      ctx.beginPath();
+
+      const amplitude = 30;
+      const frequency = 0.02;
+      const speed = Date.now() * 0.003;
+
+      for (let x = 0; x < canvas.width; x++) {
+        const y = canvas.height / 2 + Math.sin((x + speed) * frequency) * amplitude;
+        ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+      requestAnimationFrame(drawOscilloscope);
+    }
+
+    drawOscilloscope();
+  </script>
 </body>
 </html>
