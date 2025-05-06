@@ -166,12 +166,11 @@
     const bootScreen = document.getElementById('bootScreen');
     const contentEl = document.querySelector('.content');
 
-    // Hide boot screen, then type intro, then show form
     setTimeout(() => {
       bootScreen.classList.add('hidden');
       contentEl.style.display = 'block';
       typeLine();
-    }, 4000); // 4 seconds boot screen
+    }, 4000);
 
     function typeLine() {
       if (i < introLines.length) {
