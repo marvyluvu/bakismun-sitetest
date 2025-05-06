@@ -12,28 +12,15 @@
       font-size: 16px;
       line-height: 1.6;
       padding: 2rem;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       position: relative;
     }
     h1, h2 {
       color: #00ffaa;
-      animation: fadeIn 2s ease forwards;
     }
     .committee {
       margin-bottom: 2.5rem;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s ease forwards;
     }
-    .committee:nth-of-type(1) { animation-delay: 0.5s; }
-    .committee:nth-of-type(2) { animation-delay: 1s; }
-    .committee:nth-of-type(3) { animation-delay: 1.5s; }
-    .committee:nth-of-type(4) { animation-delay: 2s; }
-    .committee:nth-of-type(5) { animation-delay: 2.5s; }
-    .committee:nth-of-type(6) { animation-delay: 3s; }
-    .committee:nth-of-type(7) { animation-delay: 3.5s; }
-
     .agenda {
       margin-left: 1rem;
     }
@@ -48,6 +35,20 @@
       margin-top: 3rem;
       display: inline-block;
     }
+    .oscilloscope {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100px;
+      background: black;
+      z-index: 1;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100px;
+    }
     .content {
       position: relative;
       z-index: 2;
@@ -57,35 +58,46 @@
       color: #00ff99;
       margin-bottom: 2rem;
     }
-    .scanlines::before {
-      content: "";
+    .bg-flicker {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100vw;
       height: 100vh;
+      background: repeating-linear-gradient(transparent 0px, rgba(0, 255, 153, 0.03) 1px);
+      z-index: 0;
+      animation: flicker 1.5s infinite;
       pointer-events: none;
-      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
-      z-index: 1;
-      animation: flicker 0.15s infinite;
     }
     @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.98; }
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+      }
+      20%, 24%, 55% {
+        opacity: 0.5;
+      }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .cursor::after {
+      content: '_';
+      animation: blink 1s step-start infinite;
     }
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    .quote-box {
+      margin-top: 4rem;
+      font-style: italic;
+      color: #00ffaa;
+      opacity: 0.8;
     }
   </style>
 </head>
-<body class="scanlines">
+<body>
+  <div class="oscilloscope">
+    <canvas id="scope"></canvas>
+  </div>
+  <div class="bg-flicker"></div>
   <div class="content">
     <div class="intro" id="intro"></div>
+
     <h1>DIRECTIVE LOG // ACTIVE COMMITTEES</h1>
 
     <div class="committee">
@@ -130,6 +142,8 @@
       <p class="agenda">• Corruption, transparency, and ethics in global tournaments</p>
     </div>
 
+    <div class="quote-box cursor" id="quoteBox"></div>
+
     <a href="index.html" class="back">← Return to ACCESS PANEL</a>
   </div>
 
@@ -150,8 +164,54 @@
         setTimeout(typeLine, 1000);
       }
     }
-
     typeLine();
+
+    const canvas = document.getElementById('scope');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = 100;
+
+    function drawOscilloscope() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#00ff99';
+      ctx.beginPath();
+
+      const amplitude = 30;
+      const frequency = 0.02;
+      const speed = Date.now() * 0.003;
+
+      for (let x = 0; x < canvas.width; x++) {
+        const y = canvas.height / 2 + Math.sin((x + speed) * frequency) * amplitude;
+        ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+      requestAnimationFrame(drawOscilloscope);
+    }
+    drawOscilloscope();
+
+    const quotes = [
+      'Seek diplomacy. Seek the light.',
+      'The first casualty of war is truth.',
+      'Power, once gained, rarely returns peacefully.',
+      'In diplomacy, silence often speaks the loudest.',
+      'Treaties are written with ink, broken with blood.',
+      'We do not negotiate with silence.',
+      'Consensus is the language of survival.'
+    ];
+
+    const quoteBox = document.getElementById('quoteBox');
+    let quoteIndex = 0;
+
+    function rotateQuotes() {
+      quoteBox.textContent = quotes[quoteIndex];
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+      setTimeout(rotateQuotes, 7000);
+    }
+    rotateQuotes();
   </script>
 </body>
 </html>
