@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BAKIS MUN // MAINFRAME ACCESS</title>
+  <title>BAKIS MUN // COMMITTEE TERMINAL</title>
   <style>
     body {
       background: black;
       color: #00ff99;
       font-family: 'Courier New', monospace;
       font-size: 16px;
-      line-height: 1.6;
       padding: 2rem;
       margin: 0;
     }
@@ -78,46 +76,57 @@
       100% { opacity: 1; }
     }
 
-    a {
+    h2 {
       color: #00ffaa;
-      display: block;
-      margin-top: 1rem;
+      margin-top: 2rem;
+    }
+
+    p {
+      margin-left: 1rem;
     }
   </style>
 </head>
 <body class="scanlines">
-  <!-- Boot screen -->
   <div id="bootScreen" class="boot-screen">
-    <p class="boot-line">BAKIS MUN v1.9.74 BIOS</p>
-    <p class="boot-line">Loading system integrity modules...</p>
-    <p class="boot-line">Verifying diplomatic encryption keys...</p>
-    <p class="boot-line">Initializing Mainframe Interface</p>
-    <p class="boot-line">Authenticating...</p>
-    <p class="boot-line">LOADING PANEL █</p>
+    <p class="boot-line">BAKIS SYSTEM FIRMWARE v2.3.91</p>
+    <p class="boot-line">Loading committee configurations...</p>
+    <p class="boot-line">Checking encrypted agenda vaults... OK</p>
+    <p class="boot-line">Initializing diplomacy interface...</p>
+    <p class="boot-line">ACCESS GRANTED ▮</p>
   </div>
 
-  <!-- Terminal Interface -->
   <div class="content">
-    <div id="intro"></div>
-    <p>"Seek diplomacy."</p>
-    <p>"Seek the light."</p>
+    <pre id="intro"></pre>
 
-    <p>"Those who control language control diplomacy."</p>
-    <p>"Peace is maintained not by silence, but by dialogue."</p>
-    <p>"History is a loop—every debate echoes a previous one."</p>
-    <p>"The more cryptic the agenda, the louder its impact."</p>
+    <h2>GA1 – Disarmament and International Security Committee</h2>
+    <p>→ Agenda: The Proliferation of Autonomous Weaponry and AI in Conflict</p>
 
-    <a href="committees.html">> ACCESS COMMITTEE DATABASE</a>
-    <a href="registry.html">> INITIATE REGISTRATION PROTOCOL</a>
-    <a href="https://instagram.com/yourhandle">> REDIRECT TO TRANSMISSION ARCHIVE (Instagram)</a>
-    <a href="photos.html">> VISUAL LOGS ACCESS</a>
+    <h2>WHO – World Health Organization</h2>
+    <p>→ Agenda: Addressing Global Health Disparities Post-Pandemic</p>
+
+    <h2>UNHRC – United Nations Human Rights Council</h2>
+    <p>→ Agenda: Freedom of Expression in Authoritarian Regimes</p>
+
+    <h2>HCC – Historical Crisis Committee</h2>
+    <p>→ Agenda: The Cuban Missile Crisis, 1962 – Alternate Outcomes Simulation</p>
+
+    <h2>UNODC – United Nations Office on Drugs and Crime</h2>
+    <p>→ Agenda: Combatting the International Opioid Trade</p>
+
+    <h2>UNICEF – United Nations International Children’s Emergency Fund</h2>
+    <p>→ Agenda: Access to Education in War-Torn Regions</p>
+
+    <h2>FIFA – Federation Internationale de Football Association</h2>
+    <p>→ Agenda: Political Influence in Global Sports Governance</p>
+
+    <p style="margin-top: 3rem;"><a href="index.html" style="color:#00ffaa;">← RETURN TO PANEL</a></p>
   </div>
 
   <script>
     const introLines = [
-      '> LINKING MAINFRAME NODE ...',
-      '> DECRYPTING ACCESS LAYERS ...',
-      '> PANEL ONLINE ✓\n'
+      '> LINKING COMMITTEE DATA MODULE ...',
+      '> SYNCING AGENDA OBJECTIVES ...',
+      '> DIPLOMATIC INTERFACE ONLINE ✓\n'
     ];
 
     let i = 0;
