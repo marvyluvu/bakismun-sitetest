@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BAKIS MUN // MAINFRAME ACCESS</title>
   <style>
     body {
@@ -13,8 +13,8 @@
       line-height: 1.6;
       padding: 2rem;
       margin: 0;
+      overflow: hidden;
     }
-
     .scanlines::before {
       content: "";
       position: fixed;
@@ -23,119 +23,123 @@
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      background-image: repeating-linear-gradient(to bottom, rgba(0,255,153,0.05) 0px, rgba(0,255,153,0.05) 1px, transparent 1px, transparent 2px);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 153, 0.05) 0px,
+        rgba(0, 255, 153, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+      );
       z-index: 5;
-      animation: flicker 0.15s infinite;
+      animation: flicker 0.2s infinite;
     }
-
     @keyframes flicker {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.98; }
+      50% { opacity: 0.9; }
     }
-
-    .boot-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      color: #33ff00;
-      font-size: 14px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      z-index: 10;
+    .output { white-space: pre-line; margin-bottom: 1rem; }
+    .input-line { display: flex; align-items: center; }
+    input {
+      background: transparent;
+      border: none;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      outline: none;
+      width: 60%;
     }
-
-    .boot-line {
-      margin: 0;
-      white-space: pre;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .content {
-      display: none;
-      position: relative;
-      z-index: 2;
-    }
-
     .blinker {
-      display: inline-block;
       width: 10px;
-      background-color: #00ff99;
-      animation: blink 1s infinite;
+      height: 20px;
+      background: #00ff99;
+      animation: blink 1s step-end infinite;
+      margin-left: 4px;
     }
-
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .glitch {
+      animation: glitch 0.3s infinite;
+      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
     }
-
-    a {
-      color: #00ffaa;
-      display: block;
-      margin-top: 1rem;
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(1px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
     }
+    .hint { opacity: 0.1; font-size: 12px; }
+    .hint:hover { opacity: 1; }
   </style>
 </head>
 <body class="scanlines">
-  <!-- Boot screen -->
-  <div id="bootScreen" class="boot-screen">
-    <p class="boot-line">BAKIS MUN v1.9.74 BIOS</p>
-    <p class="boot-line">Loading system integrity modules...</p>
-    <p class="boot-line">Verifying diplomatic encryption keys...</p>
-    <p class="boot-line">Initializing Mainframe Interface</p>
-    <p class="boot-line">Authenticating...</p>
-    <p class="boot-line">LOADING PANEL █</p>
-  </div>
-
-  <!-- Terminal Interface -->
-  <div class="content">
-    <div id="intro"></div>
-    <p>"Seek diplomacy."</p>
-    <p>"Seek the light."</p>
-
-    <p>"Those who control language control diplomacy."</p>
-    <p>"Peace is maintained not by silence, but by dialogue."</p>
-    <p>"History is a loop—every debate echoes a previous one."</p>
-    <p>"The more cryptic the agenda, the louder its impact."</p>
-
-    <a href="committees.html">> ACCESS COMMITTEE DATABASE</a>
-    <a href="registry.html">> INITIATE REGISTRATION PROTOCOL</a>
-    <a href="https://instagram.com/yourhandle">> REDIRECT TO TRANSMISSION ARCHIVE (Instagram)</a>
-    <a href="photos.html">> VISUAL LOGS ACCESS</a>
+  <div>
+    <div id="output" class="output"></div>
+    <div class="input-line">
+      <span>&gt;</span>
+      <input type="text" id="userInput" autofocus autocomplete="off" />
+      <span class="blinker"></span>
+    </div>
+    <div class="hint">// hint: translate morse from instagram</div>
   </div>
 
   <script>
-    const introLines = [
-      '> LINKING MAINFRAME NODE ...',
-      '> DECRYPTING ACCESS LAYERS ...',
-      '> PANEL ONLINE ✓\n'
-    ];
+    const output = document.getElementById("output");
+    const input = document.getElementById("userInput");
+    let step = 0;
 
-    let i = 0;
-    const introEl = document.getElementById('intro');
-    const bootScreen = document.getElementById('bootScreen');
-    const contentEl = document.querySelector('.content');
-
-    setTimeout(() => {
-      bootScreen.classList.add('hidden');
-      contentEl.style.display = 'block';
-      typeLine();
-    }, 4000);
-
-    function typeLine() {
-      if (i < introLines.length) {
-        introEl.textContent += introLines[i++] + '\n';
-        setTimeout(typeLine, 700);
-      }
+    function typeText(text, delay = 50, cb) {
+      let i = 0;
+      const int = setInterval(() => {
+        output.innerHTML += text.charAt(i++);
+        if (i >= text.length) {
+          clearInterval(int);
+          output.innerHTML += "\n";
+          if (cb) cb();
+        }
+      }, delay);
     }
+
+    function bootSequence() {
+      typeText("BAKIS MUN BIOS v1.9.74\n", 30, () => {
+        typeText("Initializing diplomatic node...\n", 30, () => {
+          typeText("Awaiting authorization key:\n\n", 30);
+        });
+      });
+    }
+
+    function triggerGlitch() {
+      output.innerHTML += "\n▒▒▒ SYSTEM GLITCH ▒▒▒\n";
+    }
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const val = input.value.trim().toLowerCase();
+        input.value = "";
+        output.innerHTML += `\n> ${val}\n`;
+
+        if (step === 0) {
+          if (btoa(val) === "ZGlwbG9tYWN5") { // "diplomacy"
+            step++;
+            triggerGlitch();
+            output.innerHTML += "\n[ ACCESS GRANTED ]\n\nChoose:\n1. Reveal nuclear plans\n2. Conceal leak\n";
+          } else {
+            output.innerHTML += "\n[ ACCESS DENIED ]\n> Try again.\n";
+          }
+        } else if (step === 1) {
+          if (val === "1" || val === "2") {
+            output.innerHTML += "\nRouting to ARCHIVE NODE...\n";
+            setTimeout(() => {
+              window.location.href = "archive.html";
+            }, 3000);
+          } else {
+            output.innerHTML += "\nInvalid. Choose 1 or 2.\n";
+          }
+        }
+      }
+    });
+
+    bootSequence();
   </script>
 </body>
 </html>
