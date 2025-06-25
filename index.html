@@ -1,145 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BAKIS MUN // MAINFRAME ACCESS</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>OPERATION VERITAS+ FINAL CHALLENGE</title>
   <style>
     body {
-      background: black;
-      color: #00ff99;
-      font-family: 'Courier New', monospace;
-      font-size: 16px;
-      line-height: 1.6;
-      padding: 2rem;
-      margin: 0;
-      overflow: hidden;
+      margin:0;
+      background:#000;
+      color:#0f0;
+      font-family:'Courier New',monospace;
+      font-size:16px;
+      overflow:hidden;
+      user-select:none;
     }
+    body,canvas {cursor:none;}
     .scanlines::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
+      content:"";position:fixed;top:0;left:0;
+      width:100vw;height:100vh;
+      pointer-events:none;
+      background-image:repeating-linear-gradient(
         to bottom,
-        rgba(0, 255, 153, 0.05) 0px,
-        rgba(0, 255, 153, 0.05) 1px,
+        rgba(0,255,0,0.04) 0px,
+        rgba(0,255,0,0.04) 1px,
         transparent 1px,
         transparent 2px
       );
-      z-index: 5;
-      animation: flicker 0.2s infinite;
+      animation:flicker 0.1s infinite;
+      z-index:99;
     }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.9; }
+    @keyframes flicker{0%,100%{opacity:1;}50%{opacity:0.9;}}
+    .console {
+      position:relative;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      padding:1rem;
+      box-sizing:border-box;
     }
-    .output { white-space: pre-line; margin-bottom: 1rem; }
-    .input-line { display: flex; align-items: center; }
-    input {
-      background: transparent;
-      border: none;
-      color: #00ff99;
-      font-family: 'Courier New', monospace;
-      font-size: 16px;
-      outline: none;
-      width: 60%;
+    #output {
+      flex:1;
+      overflow-y:auto;
+      white-space:pre-wrap;
     }
-    .blinker {
-      width: 10px;
-      height: 20px;
-      background: #00ff99;
-      animation: blink 1s step-end infinite;
-      margin-left: 4px;
+    .input-line {
+      display:flex;
+      align-items:center;
+      margin-top:1rem;
     }
-    @keyframes blink { 50% { opacity: 0; } }
-    .glitch {
-      animation: glitch 0.3s infinite;
-      text-shadow: 0 0 2px #00ff99, 0 0 6px #00ff99;
+    .input-line span {
+      margin-right:0.5rem;
     }
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
-      100% { transform: translate(0); }
+    .input-line input {
+      flex:1;
+      background:transparent;
+      border:none;
+      border-bottom:1px solid #0f0;
+      color:#0f0;
+      font-family:inherit;
+      font-size:16px;
+      padding:0.2rem 0;
+      outline:none;
     }
-    .hint { opacity: 0.1; font-size: 12px; }
-    .hint:hover { opacity: 1; }
+    .input-line button {
+      margin-left:0.5rem;
+      padding:0.4rem 1rem;
+      background:transparent;
+      border:1px solid #0f0;
+      color:#0f0;
+      font-family:inherit;
+      cursor:pointer;
+    }
+    .input-line button:hover {
+      background:#0f0; color:#000;
+    }
+    audio { display:none; }
   </style>
 </head>
-<body class="scanlines">
-  <div>
-    <div id="output" class="output"></div>
+<body class="scanlines" oncontextmenu="return false;">
+  <div class="console">
+    <div id="output"></div>
+
     <div class="input-line">
-      <span>&gt;</span>
-      <input type="text" id="userInput" autofocus autocomplete="off" />
-      <span class="blinker"></span>
+      <span>CODE ONE:</span>
+      <input id="code1" type="text" autocomplete="off" placeholder="first code"/>
     </div>
-    <div class="hint">// hint: translate morse from instagram</div>
+    <div class="input-line">
+      <span>CODE TWO:</span>
+      <input id="code2" type="text" autocomplete="off" placeholder="second code"/>
+      <button id="submitBtn">SUBMIT</button>
+    </div>
   </div>
 
+  <audio id="amb" loop autoplay>
+    <source src="ambient-hum.mp3" type="audio/mpeg"/>
+  </audio>
+  <audio id="alarm">
+    <source src="alert-tone.mp3" type="audio/mpeg"/>
+  </audio>
+
   <script>
-    const output = document.getElementById("output");
-    const input = document.getElementById("userInput");
-    let step = 0;
-
-    function typeText(text, delay = 50, cb) {
-      let i = 0;
-      const int = setInterval(() => {
-        output.innerHTML += text.charAt(i++);
-        if (i >= text.length) {
-          clearInterval(int);
-          output.innerHTML += "\n";
-          if (cb) cb();
-        }
-      }, delay);
-    }
-
-    function bootSequence() {
-      typeText("BAKIS MUN BIOS v1.9.74\n", 30, () => {
-        typeText("Initializing diplomatic node...\n", 30, () => {
-          typeText("Awaiting authorization key:\n\n", 30);
-        });
-      });
-    }
-
-    function triggerGlitch() {
-      output.innerHTML += "\n▒▒▒ SYSTEM GLITCH ▒▒▒\n";
-    }
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const val = input.value.trim().toLowerCase();
-        input.value = "";
-        output.innerHTML += `\n> ${val}\n`;
-
-        if (step === 0) {
-          if (btoa(val) === "ZGlwbG9tYWN5") { // "diplomacy"
-            step++;
-            triggerGlitch();
-            output.innerHTML += "\n[ ACCESS GRANTED ]\n\nChoose:\n1. Reveal nuclear plans\n2. Conceal leak\n";
-          } else {
-            output.innerHTML += "\n[ ACCESS DENIED ]\n> Try again.\n";
-          }
-        } else if (step === 1) {
-          if (val === "1" || val === "2") {
-            output.innerHTML += "\nRouting to ARCHIVE NODE...\n";
-            setTimeout(() => {
-              window.location.href = "archive.html";
-            }, 3000);
-          } else {
-            output.innerHTML += "\nInvalid. Choose 1 or 2.\n";
-          }
-        }
+    const out = document.getElementById("output");
+    const lines = [
+      "[INITIATING FINAL VERITAS PROTOCOL]",
+      "> Protocol: ██-█-██",
+      "> Status: FINAL REVIEW",
+      "",
+      "Recovered Fragment 1:",
+      "\"Only a TRUTHSEER could see beyond the chaos...\"",
+      "",
+      "Recovered Fragment 2:",
+      "Va ivab riregfn",
+      "",
+      "Satellite Uplink: 31°47′N 35°13′E",
+      "Override Command: ████████ / KEY_2 REQUIRED",
+      ""
+    ];
+    let idx = 0;
+    function typeLine() {
+      if (idx < lines.length) {
+        out.innerText += lines[idx++] + "\n";
+        out.scrollTop = out.scrollHeight;
+        setTimeout(typeLine, 600);
       }
-    });
+    }
+    typeLine();
 
-    bootSequence();
+    const key1 = atob("VFJVVEhTRUVS").toLowerCase();    // TRUTHSEER
+    const key2 = atob("dmVyaXRhcw==").toLowerCase();   // veritas
+
+    document.getElementById("submitBtn").onclick = () => {
+      const v1 = document.getElementById("code1").value.trim().toLowerCase();
+      const v2 = document.getElementById("code2").value.trim().toLowerCase();
+      if (v1===key1 && v2===key2) {
+        out.innerText += "\n> ALL CODES VALIDATED. ACCESS GRANTED.\nRedirecting...\n";
+        setTimeout(()=>{
+          document.getElementById("amb").pause();
+          document.getElementById("alarm").play();
+          window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScKucEvMVu0QbEHWCuHEwWC618soNHDiqdTDicqTadCVc15Ow/viewform?usp=dialog";
+        },2000);
+      } else {
+        out.innerText += "\n> INVALID CODES. TERMINAL LOCKDOWN.\n";
+      }
+    };
   </script>
 </body>
 </html>
+
